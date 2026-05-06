@@ -31,4 +31,5 @@ public class AristasTest {
         Arista arista = new Arista(a, null, 100);
         assertFalse(arista.esValida());
     }
+    
 }
