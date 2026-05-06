@@ -11,6 +11,8 @@ public class Localidad {
 		if (nombre.isEmpty() || provincia.isEmpty()) {
 			throw new IllegalArgumentException("Nombre o Provincia vacios");
 		}
+		if(latitud<-90||latitud>90||longitud<-180||longitud>180)
+			throw new IllegalArgumentException("Latidud o Longitud incorrecta");
 		this.nombre = nombre;
 		this.provincia = provincia;
 		this.latitud = latitud;
