@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -27,7 +28,11 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.awt.event.ActionEvent;
 
 public class Principal {
@@ -36,29 +41,17 @@ public class Principal {
 	private JMapViewer mapa;
 	private JPanel panelControles;
 	private JPanel panelMapa;
+	
+	private ArrayList<String> provincias;
 	private JTextField nombreLocalidad;
-	private JTextField provincia;
 	private JTextField latitudLocalidad;
 	private JTextField longitudLocalidad;
-	private JTextField campoCostoPorKm;
-	private JTextField campoPorcentajeExtra;
-	private JTextField campoCostoInterprovincial;
+	
 	private Grafo grafoInicial = null;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Principal window = new Principal();
-					window.frmMapa.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	public Principal() {
+	public Principal(double costoPorKm, double porcentajeExtra, double costoInter) {
+		grafoInicial = new Grafo(costoPorKm, porcentajeExtra, costoInter);
+		AgregarProvincias();
 		initialize();
 	}
 
@@ -78,72 +71,45 @@ public class Principal {
 		frmMapa.getContentPane().add(panelControles);
 		panelControles.setLayout(null);
 
-		JLabel indicaIngreso = new JLabel("Ingrese las localidades");
+		JLabel indicaIngreso = new JLabel("<html><center>Ingrese las localidades<br>que desee conectar</center></html>");
 		indicaIngreso.setFont(new Font("Arial", Font.BOLD, 20));
 		indicaIngreso.setHorizontalAlignment(SwingConstants.CENTER);
-		indicaIngreso.setBounds(10, 10, 400, 30);
-		panelControles.add(indicaIngreso);
+		indicaIngreso.setBounds(10, 25, 400, 60);
+		panelControles.add(indicaIngreso);	
 
-		JLabel indicaIngreso2 = new JLabel("que desee conectar");
-		indicaIngreso2.setHorizontalAlignment(SwingConstants.CENTER);
-		indicaIngreso2.setFont(new Font("Arial", Font.BOLD, 20));
-		indicaIngreso2.setBounds(10, 40, 400, 30);
-		panelControles.add(indicaIngreso2);
 
-		// costo
-		JLabel lblCostoPorKm = new JLabel("Costo por km ($):");
-		lblCostoPorKm.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblCostoPorKm.setBounds(10, 85, 160, 25);
-		panelControles.add(lblCostoPorKm);
-
-		campoCostoPorKm = new JTextField();
-		campoCostoPorKm.setFont(new Font("Arial", Font.PLAIN, 14));
-		campoCostoPorKm.setBounds(185, 85, 172, 25);
-		panelControles.add(campoCostoPorKm);
-
-		JLabel lblPorcentaje = new JLabel("% extra +300 km:");
-		lblPorcentaje.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblPorcentaje.setBounds(10, 118, 160, 25);
-		panelControles.add(lblPorcentaje);
-
-		campoPorcentajeExtra = new JTextField();
-		campoPorcentajeExtra.setFont(new Font("Arial", Font.PLAIN, 14));
-		campoPorcentajeExtra.setBounds(185, 118, 172, 25);
-		panelControles.add(campoPorcentajeExtra);
-
-		JLabel lblCostoInter = new JLabel("Costo interprov. ($):");
-		lblCostoInter.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblCostoInter.setBounds(10, 151, 160, 25);
-		panelControles.add(lblCostoInter);
-
-		campoCostoInterprovincial = new JTextField();
-		campoCostoInterprovincial.setFont(new Font("Arial", Font.PLAIN, 14));
-		campoCostoInterprovincial.setBounds(185, 151, 172, 25);
-		panelControles.add(campoCostoInterprovincial);
-
-		// localidad
+					/*NOMBRE DE PROVINCIA Y LOCALIDAD*/
+		/*---------------COMBOBOX DE PROVINCIAS---------------*/
+		JLabel textProvincia = new JLabel("Provincia: ");
+	    textProvincia.setBounds(10, 200, 200, 30);
+	    textProvincia.setFont(new Font("Arial", Font.PLAIN, 15));
+	    panelControles.add(textProvincia);
+	    
+	    JComboBox<String> comboBox = new JComboBox<>();
+	    comboBox.setBounds(185, 202, 172, 25);
+	    comboBox.setFont(new Font("Arial", Font.PLAIN, 15));
+	    panelControles.add(comboBox);
+	    
+	    //Agrego las provincias al comboBox.
+	    for(String provin  : provincias) {
+	    	comboBox.addItem(provin);
+	    }
+	    
+				/*---------------LOCALIDAD---------------*/
 		JLabel indicaIngresoNombre = new JLabel("Nombre de localidad:");
 		indicaIngresoNombre.setFont(new Font("Arial", Font.PLAIN, 15));
-		indicaIngresoNombre.setBounds(10, 200, 160, 25);
+		indicaIngresoNombre.setBounds(10, 235, 160, 25);
 		panelControles.add(indicaIngresoNombre);
 
 		nombreLocalidad = new JTextField();
 		nombreLocalidad.setFont(new Font("Arial", Font.PLAIN, 14));
-		nombreLocalidad.setBounds(185, 200, 172, 25);
+		nombreLocalidad.setBounds(185, 238, 172, 25);
 		nombreLocalidad.setColumns(10);
 		panelControles.add(nombreLocalidad);
-
-		JLabel indicaIngresoProvincia = new JLabel("Provincia:");
-		indicaIngresoProvincia.setFont(new Font("Arial", Font.PLAIN, 15));
-		indicaIngresoProvincia.setBounds(10, 238, 160, 25);
-		panelControles.add(indicaIngresoProvincia);
-
-		provincia = new JTextField();
-		provincia.setFont(new Font("Arial", Font.PLAIN, 14));
-		provincia.setColumns(10);
-		provincia.setBounds(185, 238, 172, 25);
-		panelControles.add(provincia);
-
+	    /*-------------------------------------------------------------*/
+		
+						/*COORDENADAS A INGRESAR*/
+				/*---------------LATITUD---------------*/
 		JLabel indicaIngresoLatitud = new JLabel("Latitud:");
 		indicaIngresoLatitud.setFont(new Font("Arial", Font.PLAIN, 15));
 		indicaIngresoLatitud.setBounds(10, 276, 160, 25);
@@ -155,6 +121,7 @@ public class Principal {
 		latitudLocalidad.setBounds(185, 276, 172, 25);
 		panelControles.add(latitudLocalidad);
 
+				/*---------------LONGITUD---------------*/
 		JLabel indicaIngresoLongitud = new JLabel("Longitud:");
 		indicaIngresoLongitud.setFont(new Font("Arial", Font.PLAIN, 15));
 		indicaIngresoLongitud.setBounds(10, 314, 160, 25);
@@ -175,40 +142,32 @@ public class Principal {
 		btnAgregarLocalidad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (grafoInicial == null) {
-						double costoPorKm = Double.parseDouble(campoCostoPorKm.getText().trim());
-						double porcentajeExtra = Double.parseDouble(campoPorcentajeExtra.getText().trim());
-						double costoInter = Double.parseDouble(campoCostoInterprovincial.getText().trim());
-						grafoInicial = new Grafo(costoPorKm, porcentajeExtra, costoInter);
-
-						campoCostoPorKm.setEditable(false);
-						campoPorcentajeExtra.setEditable(false);
-						campoCostoInterprovincial.setEditable(false);
-					}
-
+						
 					double latitud = Double.parseDouble(latitudLocalidad.getText().trim());
 					double longitud = Double.parseDouble(longitudLocalidad.getText().trim());
-					Localidad localidadActual = new Localidad(nombreLocalidad.getText().trim(),
-							provincia.getText().trim(), latitud, longitud);
+					String nombreDeLocalidad = nombreLocalidad.getText().trim();
+					String nombreDeProvincia = comboBox.getSelectedItem().toString().trim();
+					
+					Localidad localidadActual = new Localidad(nombreDeLocalidad, nombreDeProvincia, latitud, longitud);
 					grafoInicial.agregarLocalidad(localidadActual);
 
-					// Marcar en mapa
-					Coordinate coord = new Coordinate(latitud, longitud);
-					MapMarker marker = new MapMarkerDot(localidadActual.getNombre(), coord);
-					marker.getStyle().setBackColor(Color.BLUE);
-					mapa.addMapMarker(marker);
-					mapa.setDisplayPosition(coord, mapa.getZoom());
+								/*MARCAR EN EL MAPA*/
+					String nom_ProvinciaYLocalidad = nombreDeProvincia+", "+nombreDeLocalidad;
+					marcarEnElMapa(latitud, longitud, nom_ProvinciaYLocalidad);
 
 					nombreLocalidad.setText("");
-					provincia.setText("");
 					latitudLocalidad.setText("");
 					longitudLocalidad.setText("");
 
-				} catch (NumberFormatException ex) {
+				}
+				
+				catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(frmMapa,
 							"Verificá que latitud, longitud y los parámetros de costo sean números válidos.",
 							"Error de formato", JOptionPane.ERROR_MESSAGE);
-				} catch (IllegalArgumentException ex) {
+				}
+				
+				catch (IllegalArgumentException ex) {
 					JOptionPane.showMessageDialog(frmMapa, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -229,16 +188,17 @@ public class Principal {
 		btnDarConexionOptima.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (grafoInicial == null || grafoInicial.getLocalidades().size() < 2) {
+					if (grafoInicial.getLocalidades().size() < 2) {
 						JOptionPane.showMessageDialog(frmMapa, "Ingresá al menos 2 localidades antes de conectar.",
 								"Atención", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 
-					List<Arista> mst = grafoInicial.prim();
+					List<Arista> Arbol_Generador_Minimo = grafoInicial.prim();
 					mapa.removeAllMapPolygons();
+					
 					// Dibujar cada arista del AGM en rojo
-					for (Arista arista : mst) {
+					for (Arista arista : Arbol_Generador_Minimo) {
 						Coordinate coordOrigen = new Coordinate(arista.getOrigen().getLatitud(),
 								arista.getOrigen().getLongitud());
 						Coordinate coordDestino = new Coordinate(arista.getDestino().getLatitud(),
@@ -258,11 +218,11 @@ public class Principal {
 					// costototal
 					StringBuilder sb = new StringBuilder();
 					sb.append("=== Conexiones de fibra óptica a construir ===\n\n");
-					for (Arista arista : mst) {
+					for (Arista arista : Arbol_Generador_Minimo) {
 						sb.append(String.format("• %s  →  %s\n   Costo: $%.2f\n\n", arista.getOrigen().getNombre(),
 								arista.getDestino().getNombre(), arista.getCosto()));
 					}
-					sb.append(String.format("Costo total de instalación: $%.2f", grafoInicial.costoTotal(mst)));
+					sb.append(String.format("Costo total de instalación: $%.2f", grafoInicial.costoTotal(Arbol_Generador_Minimo)));
 
 					// Mostrar con scroll
 					JTextArea textArea = new JTextArea(sb.toString());
@@ -274,7 +234,8 @@ public class Principal {
 					JOptionPane.showMessageDialog(frmMapa, scrollPane, "Conexión Óptima - Árbol Generador Mínimo",
 							JOptionPane.INFORMATION_MESSAGE);
 
-				} catch (IllegalStateException ex) {
+				}
+				catch (IllegalStateException ex) {
 					JOptionPane.showMessageDialog(frmMapa, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -297,4 +258,35 @@ public class Principal {
 
 		panelMapa.add(mapa);
 	}
+	
+	private void AgregarProvincias() {
+		provincias = new ArrayList<>();
+		
+		try {
+            Scanner sc = new Scanner(new File("Provincias.txt"));
+            
+            while (sc.hasNextLine()) {
+            	provincias.add(sc.nextLine());
+            }
+            
+            sc.close();
+        }
+		
+		catch (FileNotFoundException e) {
+        }
+		
+		
+	}
+	
+	private void marcarEnElMapa(double latitud, double longitud, String nom_ProvinciaYLocalidad) {
+		Coordinate coord = new Coordinate(latitud, longitud);
+		MapMarker marker = new MapMarkerDot(nom_ProvinciaYLocalidad, coord);
+		marker.getStyle().setBackColor(Color.BLUE);
+		mapa.addMapMarker(marker);
+		mapa.setDisplayPosition(coord, mapa.getZoom());
+	}
+	
+	public void mostrarVentana() {
+		frmMapa.setVisible(true);
+    }
 }
