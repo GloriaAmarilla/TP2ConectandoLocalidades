@@ -222,7 +222,7 @@ public class Principal {
 						sb.append(String.format("• %s  →  %s\n   Costo: $%.2f\n\n", arista.getOrigen().getNombre(),
 								arista.getDestino().getNombre(), arista.getCosto()));
 					}
-					sb.append(String.format("Costo total de instalación: $%.2f", grafoInicial.costoTotal(Arbol_Generador_Minimo)));
+					sb.append(String.format("Costo total de instalación: $%.2f", grafoInicial.costoTotal()));
 
 					// Mostrar con scroll
 					JTextArea textArea = new JTextArea(sb.toString());
@@ -248,7 +248,7 @@ public class Principal {
 		mapa.setBackground(new Color(240, 240, 240));
 		mapa.setZoomControlsVisible(true);
 
-		Coordinate coordenadaInicial = new Coordinate(-34.521, -58.719);
+		Coordinate coordenadaInicial = new Coordinate(-34.5222, -58.7000);
 		mapa.setDisplayPosition(coordenadaInicial, 12);
 
 		MapMarker puntoUNGS = new MapMarkerDot("UNGS", coordenadaInicial);

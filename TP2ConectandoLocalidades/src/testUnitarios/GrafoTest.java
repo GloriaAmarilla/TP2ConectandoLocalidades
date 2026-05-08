@@ -34,7 +34,7 @@ public class GrafoTest {
 
         List<Arista> agm = grafo.prim();
 
-        double total = grafo.costoTotal(agm);
+        double total = grafo.costoTotal();
 
         assertTrue(total > 0);
     }
