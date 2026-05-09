@@ -16,16 +16,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-
-
 public class Menu {
 
 	private JFrame frame;
-	
+
 	private JTextField campoCostoPorKm;
 	private JTextField campoPorcentajeExtra;
 	private JTextField campoCostoInterprovincial;
-	
+
 	private ArrayList<String> provincias;
 
 	public static void main(String[] args) {
@@ -42,24 +40,22 @@ public class Menu {
 	}
 
 	public Menu() {
-		
 		AgregarProvincias();
 		initialize();
 	}
 
-	
 	private void initialize() {
-	    frame = new JFrame();
-	    frame.setBounds(400, 150, 550, 400);
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    frame.getContentPane().setLayout(null);
-	    
-	    JLabel indicaIngreso = new JLabel("<html><center>Ingrese el costo que<br>corresponda.</center></html>");
+		frame = new JFrame();
+		frame.setBounds(400, 150, 550, 400);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+
+		JLabel indicaIngreso = new JLabel("<html><center>Ingrese el costo que<br>corresponda.</center></html>");
 		indicaIngreso.setFont(new Font("Arial", Font.BOLD, 20));
 		indicaIngreso.setHorizontalAlignment(SwingConstants.CENTER);
 		indicaIngreso.setBounds(10, 10, 500, 100);
 		frame.add(indicaIngreso);
-		
+
 		JLabel lblCostoPorKm = new JLabel("Costo por km ($):");
 		lblCostoPorKm.setFont(new Font("Arial", Font.PLAIN, 15));
 		lblCostoPorKm.setBounds(120, 120, 160, 25);
@@ -90,22 +86,18 @@ public class Menu {
 		campoCostoInterprovincial.setBounds(255, 200, 172, 25);
 		frame.getContentPane().add(campoCostoInterprovincial);
 
-		
 		JButton botonSiguiente = new JButton("Siguiente");
 		botonSiguiente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Para arrancar con una nueva palabra
 				String costoKm = campoCostoPorKm.getText().trim();
 				String porcentaje = campoPorcentajeExtra.getText().trim();
 				String interprov = campoCostoInterprovincial.getText().trim();
 
-				boolean valido = costoKm.matches("\\d+(\\.\\d+)?") && porcentaje.matches("\\d+(\\.\\d+)?") &&
-						interprov.matches("\\d+(\\.\\d+)?");
-
-				if(!valido) {
-					JOptionPane.showMessageDialog(frame,"Ingrese solamente números válidos.","Error",
-							JOptionPane.ERROR_MESSAGE
-					);
+				boolean valido = costoKm.matches("\\d+(\\.\\d+)?") && porcentaje.matches("\\d+(\\.\\d+)?")
+						&& interprov.matches("\\d+(\\.\\d+)?");
+				if (!valido) {
+					JOptionPane.showMessageDialog(frame, "Ingrese solamente números válidos.", "Error",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
@@ -116,35 +108,26 @@ public class Menu {
 				Principal principal = new Principal(costoPorKm, porcentajeExtra, costoInter);
 				principal.mostrarVentana();
 				frame.dispose();
-
 			}
 		});
 		botonSiguiente.setFont(new Font("Arial", Font.PLAIN, 16));
 		botonSiguiente.setBounds(180, 260, 162, 39);
 		frame.getContentPane().add(botonSiguiente);
-	    
 	}
-	
+
 	public void AgregarProvincias() {
 		provincias = new ArrayList<>();
-		
 		try {
-            Scanner sc = new Scanner(new File("Provincias.txt"));
-            
-            while (sc.hasNextLine()) {
-            	provincias.add(sc.nextLine());
-            }
-            
-            sc.close();
-        }
-		
-		catch (FileNotFoundException e) {
-        }
-		
-		
+			Scanner sc = new Scanner(new File("Provincias.txt"));
+			while (sc.hasNextLine()) {
+				provincias.add(sc.nextLine());
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+		}
 	}
+
 	public void mostrarVentana() {
 		frame.setVisible(true);
-    }
-
+	}
 }
