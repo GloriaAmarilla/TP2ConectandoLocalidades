@@ -30,7 +30,19 @@ public class Grafo {
     	aristas = Prim.dameAGM(localidades, costoPorKm, porcentajeExtra, costoInterprovincial);
     	return aristas;
     }
+    public void guardarEstado() {
+        CargaDatos.guardarLocalidades(localidades);
+        CargaDatos.guardarAristas(aristas);
+    }
 
+    public void cargarEstado() {
+        localidades = (ArrayList<Localidad>) CargaDatos.cargarLocalidades();
+        aristas = CargaDatos.cargarAristas();
+    }
+
+    public List<Arista> getAristas() {
+        return aristas;
+    }
     public double costoTotal() {
         double total = 0;
 

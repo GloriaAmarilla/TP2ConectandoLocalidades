@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 
 
 
-public class UbicacionDeLocalidades {
+public class Menu {
 
 	private JFrame frame;
 	
@@ -32,7 +32,7 @@ public class UbicacionDeLocalidades {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UbicacionDeLocalidades window = new UbicacionDeLocalidades();
+					Menu window = new Menu();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +41,7 @@ public class UbicacionDeLocalidades {
 		});
 	}
 
-	public UbicacionDeLocalidades() {
+	public Menu() {
 		
 		AgregarProvincias();
 		initialize();
@@ -143,5 +143,8 @@ public class UbicacionDeLocalidades {
 		
 		
 	}
+	public void mostrarVentana() {
+		frame.setVisible(true);
+    }
 
 }

@@ -11,7 +11,7 @@ public class Arista {
     	this.costo=Costo;
     }
 
-
+  
 
     public boolean esValida() {
         return origen != null && destino != null;
