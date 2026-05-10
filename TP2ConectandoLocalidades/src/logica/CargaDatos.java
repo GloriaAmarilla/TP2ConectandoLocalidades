@@ -9,6 +9,7 @@ public class CargaDatos {
     private static String archivosDeLocalidades = "localidades.txt";
     private static String archivosDeAristas     = "aristas.txt";
 
+
     // Guarda todas las localidades del grafo
     public static void guardarLocalidades(List<Localidad> localidades) {
     	

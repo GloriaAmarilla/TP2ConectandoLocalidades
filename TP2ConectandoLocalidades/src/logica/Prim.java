@@ -39,32 +39,39 @@ public class Prim {
 	        throw new IllegalStateException("Se necesitan al menos 2 localidades");
 	    }
 	    
-	    List<Arista> resultado = new ArrayList<>();
-	    Set<Localidad> visitadas = new HashSet<>();
+	    List<Arista> aristasElegidas = new ArrayList<>();
+	    Set<Localidad> localidadesVisitadas = new HashSet<>();
 	    Localidad inicio = localidades.get(0);
-	    visitadas.add(inicio);
+	    localidadesVisitadas.add(inicio);
 	    
-	    while (visitadas.size() < localidades.size()) {
+	    while (localidadesVisitadas.size() < localidades.size()) {
 	        Arista mejor = null;
-	        double mejorCosto = Double.MAX_VALUE;
-	       
-	        for (Localidad a : visitadas) {
-	            for (Localidad b : localidades) {
-	                if (!visitadas.contains(b)) {
-	                    double costo = calcularCosto(a, b,costoPorKm, porcentajeExtra, costoInterprovincial);
-	                    if (costo < mejorCosto) {
-	                        mejorCosto = costo;
-	                        mejor = new Arista(a, b, costo);
-	                    }
-	                }
-	            }
-	        }
+	        mejor = dameLaAristaMasLiviana(localidades, costoPorKm, porcentajeExtra, costoInterprovincial, localidadesVisitadas,
+					mejor);
 	        
 	        if (mejor != null) {
-	            resultado.add(mejor);
-	            visitadas.add(mejor.getDestino());
+	            aristasElegidas.add(mejor);
+	            localidadesVisitadas.add(mejor.getDestino());
 	        }
 	    }
-	    return resultado;
+	    return aristasElegidas;
     }
+
+	private static Arista dameLaAristaMasLiviana(ArrayList<Localidad> localidades, double costoPorKm,
+			double porcentajeExtra, double costoInterprovincial, Set<Localidad> visitadas, Arista mejor) {
+		double mejorCosto = Double.MAX_VALUE;
+      
+		for (Localidad a : visitadas) {
+		    for (Localidad b : localidades) {
+		        if (!visitadas.contains(b)) {
+		            double costo = calcularCosto(a, b,costoPorKm, porcentajeExtra, costoInterprovincial);
+		            if (costo < mejorCosto) {
+		                mejorCosto = costo;
+		                mejor = new Arista(a, b, costo);
+		            }
+		        }
+		    }
+		}
+		return mejor;
+	}
 }

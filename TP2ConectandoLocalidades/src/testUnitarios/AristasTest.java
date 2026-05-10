@@ -12,23 +12,23 @@ public class AristasTest {
 
 	@Test
 	public void testAristaValida() {
-        Localidad a = new Localidad("A", "BsAs", 0, 0);
-        Localidad b = new Localidad("B", "BsAs", 1, 1);
-        Arista arista = new Arista(a, b, 100);
+        Localidad origen = new Localidad("A", "BsAs", 0, 0);
+        Localidad destino = new Localidad("B", "BsAs", 1, 1);
+        Arista arista = new Arista(origen, destino, 100);
         assertTrue(arista.esValida());
     }
 
     @Test
     public void testAristaConOrigenNull() {
-        Localidad b = new Localidad("B", "BsAs", 1, 1);
-        Arista arista = new Arista(null, b, 100);
+        Localidad destino = new Localidad("B", "BsAs", 1, 1);
+        Arista arista = new Arista(null, destino, 100);
         assertFalse(arista.esValida());
     }
 
     @Test
     public void testAristaConDestinoNull() {
-        Localidad a = new Localidad("A", "BsAs", 0, 0);
-        Arista arista = new Arista(a, null, 100);
+        Localidad origen = new Localidad("A", "BsAs", 0, 0);
+        Arista arista = new Arista(origen, null, 100);
         assertFalse(arista.esValida());
     }
     
