@@ -12,8 +12,13 @@ public class LocalidadTest {
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
-	public void longitudIncorrecto() {
+	public void longitudIncorrectaTest() {
 		Localidad loc = new Localidad("localidad","provincia",-90.0001,10.1010);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void latitudIncorrectaTest() {
+		Localidad loc = new Localidad("localidad","provincia",-90.0000,180.0001);
 	}
 
 }

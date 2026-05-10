@@ -19,12 +19,9 @@ import logica.CargaDatos;
 public class Menu {
 
 	private JFrame frame;
-
 	private JTextField campoCostoPorKm;
 	private JTextField campoPorcentajeExtra;
 	private JTextField campoCostoInterprovincial;
-	
-	private CargaDatos datos;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -135,7 +132,7 @@ public class Menu {
 		
 		btnEliminarDatos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				datos.limpiarArchivos();
+				CargaDatos.limpiarArchivos();
 				btnEliminarDatos.setEnabled(false);
 				
 				JOptionPane.showMessageDialog(null,"Los datos fueron eliminados correctamente",

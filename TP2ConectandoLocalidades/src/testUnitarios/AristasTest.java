@@ -11,7 +11,7 @@ import logica.Localidad;
 public class AristasTest {
 
 	@Test
-	public void testAristaValida() {
+	public void aristaValidaTest() {
         Localidad origen = new Localidad("A", "BsAs", 0, 0);
         Localidad destino = new Localidad("B", "BsAs", 1, 1);
         Arista arista = new Arista(origen, destino, 100);
@@ -19,14 +19,14 @@ public class AristasTest {
     }
 
     @Test
-    public void testAristaConOrigenNull() {
+    public void aristaConOrigenNullTest() {
         Localidad destino = new Localidad("B", "BsAs", 1, 1);
         Arista arista = new Arista(null, destino, 100);
         assertFalse(arista.esValida());
     }
 
     @Test
-    public void testAristaConDestinoNull() {
+    public void aristaConDestinoNullTest() {
         Localidad origen = new Localidad("A", "BsAs", 0, 0);
         Arista arista = new Arista(origen, null, 100);
         assertFalse(arista.esValida());
