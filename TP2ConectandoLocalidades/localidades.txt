@@ -1,5 +1,0 @@
-3,Buenos Aires,3.0,3.0
-2,Buenos Aires,2.0,2.0
-4,Buenos Aires,4.0,4.0
-2,Buenos Aires,5.0,4.0
-3,Chaco,3.0,2.0

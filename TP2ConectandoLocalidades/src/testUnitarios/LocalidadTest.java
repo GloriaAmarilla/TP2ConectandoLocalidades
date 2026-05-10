@@ -10,5 +10,10 @@ public class LocalidadTest {
 	public void nombreYProvinciaVaciosTest() {
 		Localidad loc = new Localidad("","",3.4,5.6);
 	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void longitudIncorrecto() {
+		Localidad loc = new Localidad("localidad","provincia",-90.0001,10.1010);
+	}
 
 }

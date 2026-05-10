@@ -1,9 +1,7 @@
 package logica;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Grafo {
 
@@ -38,6 +36,16 @@ public class Grafo {
     public void cargarEstado() {
         localidades = (ArrayList<Localidad>) CargaDatos.cargarLocalidades();
         aristas = CargaDatos.cargarAristas();
+    }
+    
+    public void limpiarEstado() {
+        if (localidades != null) {
+            localidades.clear();
+        }
+
+        if (aristas != null) {
+            aristas.clear();
+        }
     }
 
     public List<Arista> getAristas() {

@@ -1,13 +1,11 @@
 package Visual;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import logica.CargaDatos;
+
 public class Menu {
 
 	private JFrame frame;
@@ -23,9 +23,9 @@ public class Menu {
 	private JTextField campoCostoPorKm;
 	private JTextField campoPorcentajeExtra;
 	private JTextField campoCostoInterprovincial;
-
-	private ArrayList<String> provincias;
-
+	
+	private CargaDatos datos;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -40,7 +40,6 @@ public class Menu {
 	}
 
 	public Menu() {
-		AgregarProvincias();
 		initialize();
 	}
 
@@ -89,6 +88,7 @@ public class Menu {
 		JButton botonSiguiente = new JButton("Siguiente");
 		botonSiguiente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				String costoKm = campoCostoPorKm.getText().trim();
 				String porcentaje = campoPorcentajeExtra.getText().trim();
 				String interprov = campoCostoInterprovincial.getText().trim();
@@ -110,21 +110,38 @@ public class Menu {
 				frame.dispose();
 			}
 		});
+		
+		/*BOTON PARA ELIMINAR LOS DATOS GUARDADOS*/
 		botonSiguiente.setFont(new Font("Arial", Font.PLAIN, 16));
 		botonSiguiente.setBounds(180, 260, 162, 39);
 		frame.getContentPane().add(botonSiguiente);
-	}
+		
+		JButton btnEliminarDatos = new JButton("🗑");
+		btnEliminarDatos.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 26));
+		btnEliminarDatos.setBounds(10, 300, 45, 40);
+		
+		btnEliminarDatos.setContentAreaFilled(false);
+		btnEliminarDatos.setOpaque(false);
+		btnEliminarDatos.setBorderPainted(false);
+		btnEliminarDatos.setFocusPainted(false);
+		btnEliminarDatos.setForeground(Color.RED);
+		
+		btnEliminarDatos.setMargin(new Insets(0, 0, 0, 0));
+		btnEliminarDatos.setHorizontalAlignment(SwingConstants.CENTER);
+		btnEliminarDatos.setVerticalAlignment(SwingConstants.CENTER);
+		
+		frame.add(btnEliminarDatos);
 
-	public void AgregarProvincias() {
-		provincias = new ArrayList<>();
-		try {
-			Scanner sc = new Scanner(new File("Provincias.txt"));
-			while (sc.hasNextLine()) {
-				provincias.add(sc.nextLine());
+		
+		btnEliminarDatos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				datos.limpiarArchivos();
+				btnEliminarDatos.setEnabled(false);
+				
+				JOptionPane.showMessageDialog(null,"Los datos fueron eliminados correctamente",
+						"Operación exitosa",JOptionPane.INFORMATION_MESSAGE);
 			}
-			sc.close();
-		} catch (FileNotFoundException e) {
-		}
+		});
 	}
 
 	public void mostrarVentana() {

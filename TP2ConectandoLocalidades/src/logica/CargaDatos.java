@@ -6,17 +6,34 @@ import java.util.List;
 
 public class CargaDatos {
 
-    private static final String ARCHIVO_LOCALIDADES = "localidades.txt";
-    private static final String ARCHIVO_ARISTAS     = "aristas.txt";
+    private static String archivosDeLocalidades = "localidades.txt";
+    private static String archivosDeAristas     = "aristas.txt";
 
     // Guarda todas las localidades del grafo
     public static void guardarLocalidades(List<Localidad> localidades) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_LOCALIDADES))) {
+    	
+    	List<Localidad> existentes = cargarLocalidades();
+    	
+        try (PrintWriter pw = new PrintWriter(new FileWriter(archivosDeLocalidades, true))) {
             for (Localidad l : localidades) {
-                pw.println(l.getNombre() + "," +
-                           l.getProvincia() + "," +
-                           l.getLatitud() + "," +
-                           l.getLongitud());
+            	
+            	boolean existe = false;
+            	
+            	for (Localidad e : existentes) {
+                    if (e.getNombre().equalsIgnoreCase(l.getNombre()) &&
+                        e.getProvincia().equalsIgnoreCase(l.getProvincia()) &&
+                        e.getLatitud() == l.getLatitud() &&
+                        e.getLongitud() == l.getLongitud()) {
+                        existe = true;
+                        break;
+                    }
+                }
+            	if (!existe) {
+            		pw.println(l.getNombre() + "," +
+            				l.getProvincia() + "," +
+            				l.getLatitud() + "," +
+            				l.getLongitud());
+            	}
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -26,7 +43,7 @@ public class CargaDatos {
     // Carga las localidades desde el archivo
     public static List<Localidad> cargarLocalidades() {
         List<Localidad> lista = new ArrayList<>();
-        File f = new File(ARCHIVO_LOCALIDADES);
+        File f = new File(archivosDeLocalidades);
         if (!f.exists()) return lista;
 
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
@@ -50,17 +67,33 @@ public class CargaDatos {
 
     // Guarda las aristas del AGM
     public static void guardarAristas(List<Arista> aristas) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_ARISTAS))) {
+    	
+    	List<Arista> existentes = cargarAristas();
+    	
+        try (PrintWriter pw = new PrintWriter(new FileWriter(archivosDeAristas, true))) {
             for (Arista a : aristas) {
-                pw.println(a.getOrigen().getNombre() + "," +
-                           a.getOrigen().getProvincia() + "," +
-                           a.getOrigen().getLatitud() + "," +
-                           a.getOrigen().getLongitud() + "," +
-                           a.getDestino().getNombre() + "," +
-                           a.getDestino().getProvincia() + "," +
-                           a.getDestino().getLatitud() + "," +
-                           a.getDestino().getLongitud() + "," +
-                           a.getCosto());
+            	boolean existe = false;
+
+                for (Arista e : existentes) {
+                    if (e.getOrigen().getNombre().equalsIgnoreCase(a.getOrigen().getNombre()) &&
+                    	e.getDestino().getNombre().equalsIgnoreCase(a.getDestino().getNombre()) &&
+                    	e.getCosto() == a.getCosto()) {
+                    	existe = true;
+                        break;
+                    }
+                }
+                
+                if (!existe) {
+	                pw.println(a.getOrigen().getNombre() + "," +
+	                           a.getOrigen().getProvincia() + "," +
+	                           a.getOrigen().getLatitud() + "," +
+	                           a.getOrigen().getLongitud() + "," +
+	                           a.getDestino().getNombre() + "," +
+	                           a.getDestino().getProvincia() + "," +
+	                           a.getDestino().getLatitud() + "," +
+	                           a.getDestino().getLongitud() + "," +
+	                           a.getCosto());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,7 +103,7 @@ public class CargaDatos {
     // Carga las aristas del AGM
     public static List<Arista> cargarAristas() {
         List<Arista> lista = new ArrayList<>();
-        File f = new File(ARCHIVO_ARISTAS);
+        File f = new File(archivosDeAristas);
         if (!f.exists()) return lista;
 
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
@@ -91,5 +124,17 @@ public class CargaDatos {
             e.printStackTrace();
         }
         return lista;
+    }
+    
+    public static void limpiarArchivos() {
+    	
+        try {
+            new PrintWriter(new FileWriter(archivosDeLocalidades, false)).close();
+            new PrintWriter(new FileWriter(archivosDeAristas, false)).close();
+        }
+        
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

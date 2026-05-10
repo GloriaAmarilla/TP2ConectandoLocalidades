@@ -28,6 +28,7 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 
+//import jdk.internal.org.jline.terminal.TerminalBuilder.SystemOutput;
 import logica.Arista;
 import logica.Grafo;
 import logica.Localidad;
@@ -48,7 +49,7 @@ public class Principal {
 
 	public Principal(double costoPorKm, double porcentajeExtra, double costoInter) {
 		grafoInicial = new Grafo(costoPorKm, porcentajeExtra, costoInter);
-		grafoInicial.cargarEstado();
+//		grafoInicial.cargarEstado();
 		AgregarProvincias();
 		initialize();
 	}
@@ -212,7 +213,7 @@ public class Principal {
 
 		JButton MenuCosto = new JButton("Menu Costos");
 		MenuCosto.setFont(new Font("Arial", Font.BOLD, 16));
-		MenuCosto.setBounds(107, 500, 190, 40);
+		MenuCosto.setBounds(107, 545, 190, 40);
 		panelControles.add(MenuCosto);
 		MenuCosto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -231,16 +232,58 @@ public class Principal {
 
 		Coordinate coordenadaInicial = new Coordinate(-34.5222, -58.7000);
 		mapa.setDisplayPosition(coordenadaInicial, 12);
+		marcarUngsEnElMapa(coordenadaInicial);
 
+		panelMapa.add(mapa);
+
+		//Cargar datos guardados al iniciar
+		
+		JButton btnMarcarEnElMapa = new JButton("<html><center>Marcar<br>datos<center><html>");
+		btnMarcarEnElMapa.setFont(new Font("Arial", Font.BOLD, 12));
+		btnMarcarEnElMapa.setBounds(107, 500, 95, 40);
+		panelControles.add(btnMarcarEnElMapa);
+		
+		JButton btnDesmarcarDelMapa = new JButton("<html><center>Desmarcar<br>datos<center><html>");
+		btnDesmarcarDelMapa.setFont(new Font("Arial", Font.BOLD, 12));
+		btnDesmarcarDelMapa.setBounds(205, 500, 92, 40);
+		panelControles.add(btnDesmarcarDelMapa);
+		
+		btnDesmarcarDelMapa.setEnabled(false);
+
+		
+		btnMarcarEnElMapa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				grafoInicial.cargarEstado();
+				cargarDatosGuardados();
+				btnMarcarEnElMapa.setEnabled(false);
+				btnDesmarcarDelMapa.setEnabled(true);
+				
+			}
+		});
+		
+		btnDesmarcarDelMapa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				grafoInicial.limpiarEstado();
+				mapa.removeAllMapMarkers();
+				mapa.removeAllMapPolygons();
+				marcarUngsEnElMapa(coordenadaInicial);
+				btnDesmarcarDelMapa.setEnabled(false);
+				btnMarcarEnElMapa.setEnabled(true);
+				
+			}
+		});
+		
+		//Eliminar Datos Gaurdados
+		
+	}
+
+	private void marcarUngsEnElMapa(Coordinate coordenadaInicial) {
 		MapMarker puntoUNGS = new MapMarkerDot("UNGS", coordenadaInicial);
 		puntoUNGS.getStyle().setBackColor(Color.RED);
 		puntoUNGS.getStyle().setColor(Color.ORANGE);
 		mapa.addMapMarker(puntoUNGS);
-
-		panelMapa.add(mapa);
-
-		// Cargar datos guardados al iniciar
-		cargarDatosGuardados();
 	}
 
 	private void cargarDatosGuardados() {
